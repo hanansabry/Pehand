@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="city_array">
+        <item>سرس الليان</item>
+        <item>منوف</item>
+        <item>الباجور</item>
+        <item>شبين الكوم</item>
+    </string-array>
+
+    <string-array name="village_array">
+        <item>منطقة 1</item>
+        <item>منطقة 2</item>
+        <item>منطقة 3</item>
+
+    </string-array>
+</resources>
