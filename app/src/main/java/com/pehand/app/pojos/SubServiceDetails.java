@@ -1,16 +1,40 @@
 package com.pehand.app.pojos;
 
+import android.util.Log;
+
+import com.google.gson.annotations.SerializedName;
+import com.pehand.app.common.Constants;
+
 public class SubServiceDetails {
 
+    @SerializedName("Id")
     private int id;
+    @SerializedName("SubServiceName")
     private String subServiceName;
+    @SerializedName("CurrentPrice")
     private String currentPrice;
+    @SerializedName("PhotoName")
     private String photoName;
+    @SerializedName("Description")
     private String description;
+    @SerializedName("PServiceId")
     private int pServiceId;
+    @SerializedName("Active")
     private boolean active;
+    @SerializedName("IsOffer")
     private boolean isOffer;
+    @SerializedName("PriceNote")
     private String priceNote;
+
+    public SubServiceDetails(int id, String subServiceName, String currentPrice, String photoName, String description, int pServiceId, String priceNote) {
+        this.id = id;
+        this.subServiceName = subServiceName;
+        this.currentPrice = currentPrice;
+        this.photoName = photoName;
+        this.description = description;
+        this.pServiceId = pServiceId;
+        this.priceNote = priceNote;
+    }
 
     public int getId() {
         return id;
@@ -37,7 +61,8 @@ public class SubServiceDetails {
     }
 
     public String getPhotoName() {
-        return photoName;
+        Log.d("details photo" , Constants.BASE_PHOTO_URL + "SubService/" + id + "/" + photoName);
+        return Constants.BASE_PHOTO_URL + "SubService/" + id + "/" + photoName;
     }
 
     public void setPhotoName(String photoName) {

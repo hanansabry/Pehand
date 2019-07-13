@@ -1,11 +1,21 @@
 package com.pehand.app.pojos;
 
+import android.util.Log;
+
+import com.google.gson.annotations.SerializedName;
+import com.pehand.app.common.Constants;
+
 public class SubService {
 
+    @SerializedName("Id")
     private int id;
+    @SerializedName("SubServiceName")
     private String subServiceName;
+    @SerializedName("CurrentPrice")
     private String currentPrice;
+    @SerializedName("PriceNote")
     private String priceNote;
+    @SerializedName("PhotoName")
     private String photoName;
 
     public SubService(int id, String subServiceName, String currentPrice, String priceNote, String photoName) {
@@ -49,7 +59,8 @@ public class SubService {
     }
 
     public String getPhotoName() {
-        return photoName;
+        Log.d("Subservice photo name", Constants.BASE_PHOTO_URL + "SubService/" + id + "/" + photoName);
+        return Constants.BASE_PHOTO_URL + "SubService/" + id + "/" + photoName;
     }
 
     public void setPhotoName(String photoName) {

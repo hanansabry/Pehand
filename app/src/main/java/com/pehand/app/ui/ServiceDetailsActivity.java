@@ -10,13 +10,19 @@ import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.pehand.app.R;
+import com.pehand.app.backend.services.ServiceRepositoryImpl;
+import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.SubService;
+import com.pehand.app.pojos.SubServiceDetails;
 
-public class ServiceDetailsActivity extends AppCompatActivity {
+public class ServiceDetailsActivity extends AppCompatActivity implements ServicesRepository.SubServiceDetailsCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,33 +30,20 @@ public class ServiceDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_service_details);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        getSubService();
 
-        TextView desc = findViewById(R.id.subservice_desc);
-        String text = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            desc.setText(Html.fromHtml("تركيب جميع انواع التكييفات شارب وكارير ويونيون اير وباور وجرى والتكييف الصحراوى وباقى انواع التكييف\\r\\n</br>\\r\\n</br>- ملحوظة:\\r\\n</br>- التركيب غير شاملة تكلفة الحامل\\r\\n</br>- الاسعار غير شاملة تكسير لتركيب تكييف ال window\\r\\n</br>- السعر غير شامل قطع غيار\\r\\n</br>- السعر لوحدة تكييف واحدة فقط", Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            desc.setText(Html.fromHtml("<h2>Title</h2><br><p>Description here</p>"));
-        }
 
-        Button orderNow = findViewById(R.id.order_now);
-        orderNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ServiceDetailsActivity.this, ServiceOrderActivity.class));
-            }
-        });
+        getSubServiceDetails();
+
+
     }
 
-    private void getSubService() {
-        if (getIntent().getExtras() != null) {
-            int id = getIntent().getExtras().getInt(Constants.SERVICE_ID);
-            String name = getIntent().getExtras().getString(Constants.SERVICE_NAME);
-            setTitle(name);
-        } else {
+    private void getSubServiceDetails() {
+        int id = getIntent().getExtras().getInt(Constants.SERVICE_ID);
+        String name = getIntent().getExtras().getString(Constants.SERVICE_NAME);
+        setTitle(name);
 
-        }
+        ServicesRepository servicesRepository = new ServiceRepositoryImpl();
+        servicesRepository.getSubServiceDetailsById(id, this);
     }
 
     @Override
@@ -59,5 +52,21 @@ public class ServiceDetailsActivity extends AppCompatActivity {
             onBackPressed();
         }
         return true;
+    }
+
+    @Override
+    public void onSuccess(SubServiceDetails subServiceDetails) {
+        ImageView photoImageView = findViewById(R.id.subservice_photo);
+        TextView descTextView = findViewById(R.id.subservice_desc);
+
+        Glide.with(this)
+                .load(subServiceDetails.getPhotoName())
+                .into(photoImageView);
+        descTextView.setText(subServiceDetails.getDescription());
+    }
+
+    @Override
+    public void onFailure(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

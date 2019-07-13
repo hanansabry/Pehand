@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
-
 import com.google.android.material.navigation.NavigationView;
 import com.pehand.app.R;
 import com.pehand.app.adapters.ServicesAdapter;
 import com.pehand.app.adapters.SliderAdapter;
+import com.pehand.app.backend.services.ServiceRepositoryImpl;
+import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.BaseActivity;
 import com.pehand.app.pojos.Service;
+import com.pehand.app.pojos.SliderImage;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -27,13 +25,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ServicesRepository.ServiceCallback {
 
     private Toolbar toolbar;
+    private ServicesRepository servicesRepository;
+    private RecyclerView servicesRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,20 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         setupToolbar();
         setupNavigationDrawer();
-        setupSliderView();
+
+        servicesRepository = new ServiceRepositoryImpl();
+        servicesRepository.getSliderImages(new ServicesRepository.ImageSliderCallback() {
+            @Override
+            public void onSuccess(ArrayList<SliderImage> sliderImages) {
+                setupSliderView(sliderImages);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+            }
+        });
+        servicesRepository.getAllServices(this);
         setupServicesRecyclerView();
     }
 
@@ -62,34 +76,33 @@ public class MainActivity extends BaseActivity
     }
 
     private void setupServicesRecyclerView() {
-        RecyclerView servicesRecyclerView = findViewById(R.id.services_recyclerView);
+        servicesRecyclerView = findViewById(R.id.services_recyclerView);
         servicesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        ServicesAdapter servicesAdapter = new ServicesAdapter(this, tempServicesList());
-        servicesRecyclerView.setAdapter(servicesAdapter);
     }
 
-    private void setupSliderView() {
+    private void setupSliderView(ArrayList<SliderImage> sliderImages) {
         SliderView sliderView = findViewById(R.id.imageSlider);
-        sliderView.setSliderAdapter(new SliderAdapter(this));
+        sliderView.setSliderAdapter(new SliderAdapter(this, sliderImages));
         sliderView.startAutoCycle();
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
     }
 
-    private ArrayList<Service> tempServicesList() {
-        ArrayList<Service> tmpList = new ArrayList<>();
-        tmpList.add(new Service(1, "خدمات التكييف", "https://www.pehand.com/files/Service/1/air-conditioner%20(2).jpg"));
-        tmpList.add(new Service(2, "فلاتر المياه", "https://www.pehand.com/files/Service/6/water-filter%20(3).jpg"));
-        tmpList.add(new Service(3, "دش وريسيفر", "https://www.pehand.com/files/Service/4/satellite%20(1).jpg"));
-        tmpList.add(new Service(4, "صيانة مكن الخياطة", "https://www.pehand.com/files/Service/5/sewing.jpg"));
-        tmpList.add(new Service(5, "الكهرباء", "https://www.pehand.com/files/Service/5/sewing.jpg"));
-        tmpList.add(new Service(6, "رفع مواد البناء", "https://www.pehand.com/files/Service/3/plug.jpg"));
-        tmpList.add(new Service(7, "النظافة المنزلية", "https://www.pehand.com/files/Service/7/mop%20(1).jpg"));
-        tmpList.add(new Service(8, "أعمال السباكة", "https://www.pehand.com/files/Service/8/plumbing%20(1).jpg"));
-        tmpList.add(new Service(9, "أسقف معلقة", "https://www.pehand.com/files/Service/9/sakf.jpg"));
-        return tmpList;
-    }
+//    private ArrayList<Service> tempServicesList() {
+//        ArrayList<Service> tmpList = new ArrayList<>();
+//        tmpList.add(new Service(1, "خدمات التكييف", "https://www.pehand.com/files/Service/1/air-conditioner%20(2).jpg"));
+//        tmpList.add(new Service(2, "فلاتر المياه", "https://www.pehand.com/files/Service/6/water-filter%20(3).jpg"));
+//        tmpList.add(new Service(3, "دش وريسيفر", "https://www.pehand.com/files/Service/4/satellite%20(1).jpg"));
+//        tmpList.add(new Service(4, "صيانة مكن الخياطة", "https://www.pehand.com/files/Service/5/sewing.jpg"));
+//        tmpList.add(new Service(5, "الكهرباء", "https://www.pehand.com/files/Service/5/sewing.jpg"));
+//        tmpList.add(new Service(6, "رفع مواد البناء", "https://www.pehand.com/files/Service/3/plug.jpg"));
+//        tmpList.add(new Service(7, "النظافة المنزلية", "https://www.pehand.com/files/Service/7/mop%20(1).jpg"));
+//        tmpList.add(new Service(8, "أعمال السباكة", "https://www.pehand.com/files/Service/8/plumbing%20(1).jpg"));
+//        tmpList.add(new Service(9, "أسقف معلقة", "https://www.pehand.com/files/Service/9/sakf.jpg"));
+//        return tmpList;
+
+//        return servicesRepository.getAllServices();
+//    }
 
     @Override
     public void onBackPressed() {
@@ -124,5 +137,16 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSuccess(ArrayList<Service> allServices) {
+        ServicesAdapter servicesAdapter = new ServicesAdapter(this, allServices, servicesRepository);
+        servicesRecyclerView.setAdapter(servicesAdapter);
+    }
+
+    @Override
+    public void onFailure(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

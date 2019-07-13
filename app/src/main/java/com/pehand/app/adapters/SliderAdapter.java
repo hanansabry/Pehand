@@ -9,14 +9,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pehand.app.R;
+import com.pehand.app.pojos.SliderImage;
 import com.smarteist.autoimageslider.SliderViewAdapter;
+
+import java.util.ArrayList;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
 
     private Context context;
+    private ArrayList<SliderImage> sliderImages;
 
-    public SliderAdapter(Context context) {
+    public SliderAdapter(Context context, ArrayList<SliderImage> sliderImages) {
         this.context = context;
+        this.sliderImages = sliderImages;
     }
 
     @Override
@@ -40,12 +45,15 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
                 break;
 
         }
+//        Glide.with(viewHolder.itemView)
+//                .load(sliderImages.get(position).getPhotoName())
+//                .into(viewHolder.imageViewBackground);
 
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return sliderImages.size();
     }
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {

@@ -8,20 +8,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.pehand.app.R;
 import com.pehand.app.adapters.SubServicesAdapter;
+import com.pehand.app.backend.services.ServiceRepositoryImpl;
+import com.pehand.app.backend.services.ServicesRepository;
+import com.pehand.app.backend.subservies.SubServiceRepository;
+import com.pehand.app.backend.subservies.SubServicesRepositoryImpTemp;
+import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.SubService;
+import com.pehand.app.pojos.SubServiceDetails;
 
 import java.util.ArrayList;
 
 import static com.pehand.app.common.Constants.SERVICE_ID;
 import static com.pehand.app.common.Constants.SERVICE_NAME;
 
-public class SubServiceActivity extends AppCompatActivity {
+public class SubServiceActivity extends AppCompatActivity implements ServicesRepository.SubServicesRetrievingCallback {
 
     private int serviceId;
     private String serviceName;
+    private RecyclerView subservicesRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,30 +38,19 @@ public class SubServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sub_service);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        ArrayList<SubService> subServices = retrieveSubServiceInfo();
-        actionBar.setTitle(serviceName);
 
-        setupSubServicesRecyclerView(subServices);
-    }
-
-    private ArrayList<SubService> retrieveSubServiceInfo() {
         serviceId = getIntent().getExtras().getInt(SERVICE_ID);
         serviceName = getIntent().getExtras().getString(SERVICE_NAME);
+        actionBar.setTitle(serviceName);
 
-        ArrayList<SubService> subServices = new ArrayList<>();
-        SubService sub1 = new SubService(1, "تركيب تكييف 1.5 حصان", "250", "جنيه", "https://www.pehand.com/Files/SubService/9/air-conditioner-installation.jpg");
-        SubService sub2 = new SubService(1, "تركيب تكييف 2.25 حصان", "250", "جنيه", "https://www.pehand.com/Files/SubService/9/air-conditioner-installation.jpg");
-        subServices.add(sub1);
-        subServices.add(sub2);
-        return subServices;
+        ServicesRepository subServiceRepository = new ServiceRepositoryImpl();
+        subServiceRepository.getAllSubServicesById(serviceId, this);
+        setupSubServicesRecyclerView();
     }
 
-    private void setupSubServicesRecyclerView(ArrayList<SubService> subServices) {
-        RecyclerView subservicesRecyclerView = findViewById(R.id.subservices_recyclerView);
+    private void setupSubServicesRecyclerView() {
+        subservicesRecyclerView = findViewById(R.id.subservices_recyclerView);
         subservicesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        SubServicesAdapter adapter = new SubServicesAdapter(this, subServices);
-        subservicesRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -61,5 +59,25 @@ public class SubServiceActivity extends AppCompatActivity {
             onBackPressed();
         }
         return true;
+    }
+
+    @Override
+    public void onSuccess(ArrayList<SubService> allSubServices) {
+        if (allSubServices.size() != 0) {
+            SubServicesAdapter adapter = new SubServicesAdapter(this, allSubServices);
+            subservicesRecyclerView.setAdapter(adapter);
+        } else {
+            finish();
+            Toast.makeText(this, "No sub services, go to details directly", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, ServiceDetailsActivity.class);
+            intent.putExtra(Constants.SERVICE_ID, serviceId);
+            intent.putExtra(Constants.SERVICE_NAME, serviceName);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onFailure(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

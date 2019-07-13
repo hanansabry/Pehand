@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pehand.app.R;
+import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.Service;
 import com.pehand.app.pojos.SubService;
@@ -24,10 +25,12 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
 
     private Context context;
     private ArrayList<Service> servicesList;
+    private ServicesRepository servicesRepository;
 
-    public ServicesAdapter(Context context, ArrayList<Service> servicesList) {
+    public ServicesAdapter(Context context, ArrayList<Service> servicesList, ServicesRepository servicesRepository) {
         this.context = context;
         this.servicesList = servicesList;
+        this.servicesRepository = servicesRepository;
     }
 
     @NonNull
