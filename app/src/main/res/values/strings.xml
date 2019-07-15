@@ -6,12 +6,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="services">Srevices</string>
+    <string name="services">الخدمات</string>
     <string name="offers">العروض</string>
     <string name="contact_us">اتصل بنا</string>
-    <string name="social_media">Social Media</string>
-    <string name="facebook">Facebook</string>
-    <string name="youtube">Youtube</string>
+    <string name="social_media">وسائل التواصل الاجتماعي</string>
+    <string name="facebook">فيس بوك</string>
+    <string name="youtube">يوتيوب</string>
     <string name="order_now">اطلب الآن</string>
     <string name="name">الاسم</string>
     <string name="happy_to_contact">نسعد بتواصلكم:</string>
@@ -29,4 +29,7 @@
     <string name="city_prompt">المدينة: *</string>
     <string name="village_prompt">المنطقة: *</string>
     <string name="agree_for_terms_checkbox">أوافق على الشروط والأحكام</string>
+    <string name="home">الرئيسية</string>
+    <string name="more">للمزيد</string>
+    <string name="for_continue">للمتابعة</string>
 </resources>

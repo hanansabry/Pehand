@@ -30,4 +30,7 @@
     <string name="city_prompt">المدينة: *</string>
     <string name="village_prompt">المنطقة: *</string>
     <string name="agree_for_terms_checkbox">أوافق على الشروط والأحكام</string>
+    <string name="home">الرئيسية</string>
+    <string name="more">للمزيد</string>
+    <string name="for_continue">للمتابعة</string>
 </resources>

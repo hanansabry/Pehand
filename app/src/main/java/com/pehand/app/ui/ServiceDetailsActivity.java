@@ -4,9 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,10 +17,11 @@ import com.pehand.app.R;
 import com.pehand.app.backend.services.ServiceRepositoryImpl;
 import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.Constants;
-import com.pehand.app.pojos.SubService;
 import com.pehand.app.pojos.SubServiceDetails;
 
 public class ServiceDetailsActivity extends AppCompatActivity implements ServicesRepository.SubServiceDetailsCallback {
+
+    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +30,8 @@ public class ServiceDetailsActivity extends AppCompatActivity implements Service
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
         getSubServiceDetails();
-
-
+        continueButton = findViewById(R.id.for_continue);
     }
 
     private void getSubServiceDetails() {
@@ -55,7 +52,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements Service
     }
 
     @Override
-    public void onSuccess(SubServiceDetails subServiceDetails) {
+    public void onSuccess(final SubServiceDetails subServiceDetails) {
         ImageView photoImageView = findViewById(R.id.subservice_photo);
         TextView descTextView = findViewById(R.id.subservice_desc);
 
@@ -63,6 +60,18 @@ public class ServiceDetailsActivity extends AppCompatActivity implements Service
                 .load(subServiceDetails.getPhotoName())
                 .into(photoImageView);
         descTextView.setText(subServiceDetails.getDescription());
+
+        continueButton.setEnabled(true);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putParcelable(Constants.SUB_SERVICE_DETAILS_KEY, subServiceDetails);
+                Intent intent = new Intent(ServiceDetailsActivity.this, ServiceOrderActivity.class);
+                intent.putExtra(Constants.SUB_SERVICE_DETAILS_KEY, b);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

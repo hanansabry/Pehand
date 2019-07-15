@@ -56,7 +56,7 @@ public class SubServicesAdapter extends RecyclerView.Adapter<SubServicesAdapter.
     class SubServiceViewHolder extends RecyclerView.ViewHolder {
         private ImageView subServiceImage;
         private TextView subServiceName, subServicePrice, subServicePriceNote;
-        private Button orderNow;
+        private Button moreButton;
         public SubServiceViewHolder(@NonNull final View itemView) {
             super(itemView);
 
@@ -64,8 +64,8 @@ public class SubServicesAdapter extends RecyclerView.Adapter<SubServicesAdapter.
             subServiceName = itemView.findViewById(R.id.subservice_name);
             subServicePrice = itemView.findViewById(R.id.subservice_price);
             subServicePriceNote = itemView.findViewById(R.id.subservice_price_note);
-            orderNow = itemView.findViewById(R.id.order_now);
-            orderNow.setOnClickListener(new View.OnClickListener() {
+            moreButton = itemView.findViewById(R.id.for_continue);
+            moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int id = getAdapterPosition();

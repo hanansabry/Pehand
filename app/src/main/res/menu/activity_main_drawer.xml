@@ -5,19 +5,20 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
+        <item
             android:id="@+id/nav_services"
             android:icon="@drawable/ic_services"
-            android:iconTint="@color/colorPrimary"
             android:title="@string/services" />
         <item
             android:id="@+id/nav_offers"
             android:icon="@drawable/ic_offers"
-            android:iconTint="@color/colorPrimary"
             android:title="@string/offers" />
         <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_contact_us"
-            android:iconTint="@color/colorPrimary"
             android:title="@string/contact_us" />
     </group>
 

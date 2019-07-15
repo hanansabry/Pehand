@@ -1,11 +1,13 @@
 package com.pehand.app.pojos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 import com.pehand.app.common.Constants;
 
-public class SubServiceDetails {
+public class SubServiceDetails implements Parcelable {
 
     @SerializedName("Id")
     private int id;
@@ -35,6 +37,30 @@ public class SubServiceDetails {
         this.pServiceId = pServiceId;
         this.priceNote = priceNote;
     }
+
+    protected SubServiceDetails(Parcel in) {
+        id = in.readInt();
+        subServiceName = in.readString();
+        currentPrice = in.readString();
+        photoName = in.readString();
+        description = in.readString();
+        pServiceId = in.readInt();
+        active = in.readByte() != 0;
+        isOffer = in.readByte() != 0;
+        priceNote = in.readString();
+    }
+
+    public static final Creator<SubServiceDetails> CREATOR = new Creator<SubServiceDetails>() {
+        @Override
+        public SubServiceDetails createFromParcel(Parcel in) {
+            return new SubServiceDetails(in);
+        }
+
+        @Override
+        public SubServiceDetails[] newArray(int size) {
+            return new SubServiceDetails[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -107,5 +133,23 @@ public class SubServiceDetails {
 
     public void setPriceNote(String priceNote) {
         this.priceNote = priceNote;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(subServiceName);
+        dest.writeString(currentPrice);
+        dest.writeString(photoName);
+        dest.writeString(description);
+        dest.writeInt(pServiceId);
+        dest.writeByte((byte) (active ? 1 : 0));
+        dest.writeByte((byte) (isOffer ? 1 : 0));
+        dest.writeString(priceNote);
     }
 }

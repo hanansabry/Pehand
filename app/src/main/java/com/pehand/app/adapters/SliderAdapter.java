@@ -32,22 +32,23 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
-        switch (position) {
-            case 0:
-                Glide.with(viewHolder.itemView)
-                        .load("https://www.pehand.com/Files/HomeSlider/2/Wallpaper.jpg")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 1:
-                Glide.with(viewHolder.itemView)
-                        .load("https://www.pehand.com/Files/HomeSlider/1/22.jpg")
-                        .into(viewHolder.imageViewBackground);
-                break;
-
-        }
-//        Glide.with(viewHolder.itemView)
-//                .load(sliderImages.get(position).getPhotoName())
-//                .into(viewHolder.imageViewBackground);
+//        switch (position) {
+//            case 0:
+//                Glide.with(viewHolder.itemView)
+//                        .load("https://www.pehand.com/Files/HomeSlider/2/Wallpaper.jpg")
+//                        .into(viewHolder.imageViewBackground);
+//                break;
+//            case 1:
+//                Glide.with(viewHolder.itemView)
+//                        .load("https://www.pehand.com/Files/HomeSlider/1/22.jpg")
+//                        .into(viewHolder.imageViewBackground);
+//                break;
+//
+//        }
+        Glide.with(viewHolder.itemView)
+                .load(sliderImages.get(position).getPhotoName())
+                .placeholder(R.drawable.wallpaper)
+                .into(viewHolder.imageViewBackground);
 
     }
 
