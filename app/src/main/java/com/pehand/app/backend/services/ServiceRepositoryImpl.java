@@ -2,10 +2,12 @@ package com.pehand.app.backend.services;
 
 import com.pehand.app.backend.retrofit.ApiClient;
 import com.pehand.app.backend.retrofit.PehandEndpoints;
+import com.pehand.app.pojos.City;
 import com.pehand.app.pojos.Service;
 import com.pehand.app.pojos.SliderImage;
 import com.pehand.app.pojos.SubService;
 import com.pehand.app.pojos.SubServiceDetails;
+import com.pehand.app.pojos.Village;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import retrofit2.Response;
 
 public class ServiceRepositoryImpl implements ServicesRepository {
 
-    PehandEndpoints apiService;
+    private PehandEndpoints apiService;
 
     public ServiceRepositoryImpl() {
         apiService = ApiClient.getClient().create(PehandEndpoints.class);
@@ -51,7 +53,7 @@ public class ServiceRepositoryImpl implements ServicesRepository {
 
             @Override
             public void onFailure(Call<List<SubService>> call, Throwable t) {
-                callback.onFailure(t.toString());
+                callback.onFailure(t.getMessage());
             }
         });
     }
@@ -68,7 +70,7 @@ public class ServiceRepositoryImpl implements ServicesRepository {
 
             @Override
             public void onFailure(Call<SubServiceDetails> call, Throwable t) {
-                callback.onFailure(t.toString());
+                callback.onFailure(t.getMessage());
             }
         });
     }
@@ -85,7 +87,7 @@ public class ServiceRepositoryImpl implements ServicesRepository {
 
             @Override
             public void onFailure(Call<List<SubService>> call, Throwable t) {
-                callback.onFailure(t.toString());
+                callback.onFailure(t.getMessage());
             }
         });
     }
@@ -102,18 +104,48 @@ public class ServiceRepositoryImpl implements ServicesRepository {
 
             @Override
             public void onFailure(Call<List<SliderImage>> call, Throwable t) {
-                callback.onFailure(t.toString());
+                callback.onFailure(t.getMessage());
             }
         });
     }
 
     @Override
-    public void getAllCities(CityRetrievingCallback callback) {
+    public void getAllCities(final CityRetrievingCallback callback) {
+        Call<List<City>> call = apiService.getAllCity();
+        call.enqueue(new Callback<List<City>>() {
+            @Override
+            public void onResponse(Call<List<City>> call, Response<List<City>> response) {
+                ArrayList<City> cities = (ArrayList<City>) response.body();
+                callback.onSuccess(cities);
+            }
 
+            @Override
+            public void onFailure(Call<List<City>> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
     }
 
     @Override
-    public void getVillageOfCityById(VillageRetrievingCallback callback) {
+    public void getVillageOfCityById(int id, final VillageRetrievingCallback callback) {
+        Call<List<Village>> call = apiService.getVillagesOfCityById(id);
+        call.enqueue(new Callback<List<Village>>() {
+            @Override
+            public void onResponse(Call<List<Village>> call, Response<List<Village>> response) {
+                ArrayList<Village> villages = (ArrayList<Village>) response.body();
+                ArrayList<String> villageNames = new ArrayList<>();
+                ArrayList<Integer> villageIds = new ArrayList<>();
+                for (Village village : villages) {
+                    villageNames.add(village.getVillageName());
+                    villageIds.add(village.getId());
+                }
+                callback.onSuccess(villageNames, villageIds);
+            }
 
+            @Override
+            public void onFailure(Call<List<Village>> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
     }
 }

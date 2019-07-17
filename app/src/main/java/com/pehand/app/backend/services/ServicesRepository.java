@@ -43,7 +43,7 @@ public interface ServicesRepository {
     }
 
     interface VillageRetrievingCallback {
-        void onSuccess(ArrayList<Village> villages);
+        void onSuccess(ArrayList<String> villages, ArrayList<Integer> villageIds);
 
         void onFailure(String msg);
     }
@@ -60,5 +60,5 @@ public interface ServicesRepository {
 
     void getAllCities(CityRetrievingCallback callback);
 
-    void getVillageOfCityById(VillageRetrievingCallback callback);
+    void getVillageOfCityById(int id, VillageRetrievingCallback callback);
 }

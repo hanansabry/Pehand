@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.pehand.app.R;
 import com.pehand.app.adapters.SubServicesAdapter;
 import com.pehand.app.backend.services.ServiceRepositoryImpl;
@@ -22,6 +25,8 @@ import static com.pehand.app.common.Constants.SERVICE_NAME;
 
 public class OffersActivity extends AppCompatActivity implements ServicesRepository.SubServicesRetrievingCallback {
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,23 +35,11 @@ public class OffersActivity extends AppCompatActivity implements ServicesReposit
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        progressBar = findViewById(R.id.progress_bar);
+
         ServicesRepository servicesRepository = new ServiceRepositoryImpl();
         servicesRepository.getAllOffers(this);
     }
-
-//    private ArrayList<SubService> retrieveOffersInfo() {
-////        int serviceId = getIntent().getExtras().getInt(SERVICE_ID);
-////        String serviceName = getIntent().getExtras().getString(SERVICE_NAME);
-//
-//        ArrayList<SubService> subServices = new ArrayList<>();
-//        SubService sub1 = new SubService(1, "فلتر مياه 7 مراحل تايوانى بخزان 10 لتر", "2100", "جنيه شامل التركيب", "https://www.pehand.com/Files/SubService/1/1%20(1).jpg");
-//        SubService sub2 = new SubService(1, "فلتر مياه 5 مراحل تايوانى", "500", "جنيه شامل التركيب", "https://www.pehand.com/Files/SubService/2/s520121314253.jpg");
-//        SubService sub3 = new SubService(1, "معاينة صيانة أو تركيب فلتر أو تغير أى شمع", "25", "جنيه للمعاينة", "https://www.pehand.com/Files/SubService/8/تعمیرکار-دستگاه-تصفیه-آب (1).jpg");
-//        subServices.add(sub1);
-//        subServices.add(sub2);
-//        subServices.add(sub3);
-//        return subServices;
-//    }
 
     private void setupSubServicesRecyclerView(ArrayList<SubService> subServices) {
         RecyclerView subservicesRecyclerView = findViewById(R.id.offers_recyclerView);
@@ -66,11 +59,14 @@ public class OffersActivity extends AppCompatActivity implements ServicesReposit
 
     @Override
     public void onSuccess(ArrayList<SubService> allOffers) {
+        progressBar.setVisibility(View.INVISIBLE);
         setupSubServicesRecyclerView(allOffers);
     }
 
     @Override
     public void onFailure(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        progressBar.setVisibility(View.INVISIBLE);
+        //Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_msg), Snackbar.LENGTH_LONG).show();
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.pehand.app.R;
@@ -14,6 +15,8 @@ import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.Service;
 import com.pehand.app.pojos.SubService;
+import com.pehand.app.pojos.SubServiceDetails;
+import com.pehand.app.ui.ServiceDetailsActivity;
 import com.pehand.app.ui.SubServiceActivity;
 
 import java.util.ArrayList;
@@ -66,13 +69,32 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
             serviceImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent subServiceIntent = new Intent(context, SubServiceActivity.class);
-
                     int id = getAdapterPosition();
-                    Service selectedService = servicesList.get(id);
-                    subServiceIntent.putExtra(Constants.SERVICE_ID, selectedService.getId());
-                    subServiceIntent.putExtra(Constants.SERVICE_NAME, selectedService.getServiceName());
-                    context.startActivity(subServiceIntent);
+                    final Service selectedService = servicesList.get(id);
+
+                    if (selectedService.getSubCount() == 0) {
+                        Toast.makeText(context, context.getString(R.string.not_available), Toast.LENGTH_LONG).show();
+                    } else if (selectedService.getSubCount() == 1) {
+                        final Intent subServiceIntent = new Intent(context, ServiceDetailsActivity.class);
+                        servicesRepository.getAllSubServicesById(selectedService.getId(), new ServicesRepository.SubServicesRetrievingCallback() {
+                            @Override
+                            public void onSuccess(ArrayList<SubService> allSubServices) {
+                                subServiceIntent.putExtra(Constants.SERVICE_ID, allSubServices.get(0).getId());
+                                subServiceIntent.putExtra(Constants.SERVICE_NAME, allSubServices.get(0).getSubServiceName());
+                                context.startActivity(subServiceIntent);
+                            }
+
+                            @Override
+                            public void onFailure(String msg) {
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Intent subServiceIntent = new Intent(context, SubServiceActivity.class);
+                        subServiceIntent.putExtra(Constants.SERVICE_ID, selectedService.getId());
+                        subServiceIntent.putExtra(Constants.SERVICE_NAME, selectedService.getServiceName());
+                        context.startActivity(subServiceIntent);
+                    }
                 }
             });
         }

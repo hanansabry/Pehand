@@ -1,6 +1,7 @@
 package com.pehand.app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,24 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pehand.app.R;
+import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.SliderImage;
+import com.pehand.app.ui.MainActivity;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
 
-    private Context context;
+    public interface SliderCallback {
+        void onClick(SliderImage currentImage);
+    }
+
+    private SliderCallback sliderCallback;
     private ArrayList<SliderImage> sliderImages;
 
-    public SliderAdapter(Context context, ArrayList<SliderImage> sliderImages) {
-        this.context = context;
+    public SliderAdapter(ArrayList<SliderImage> sliderImages, SliderCallback sliderCallback) {
+        this.sliderCallback = sliderCallback;
         this.sliderImages = sliderImages;
     }
 
@@ -32,24 +39,17 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
-//        switch (position) {
-//            case 0:
-//                Glide.with(viewHolder.itemView)
-//                        .load("https://www.pehand.com/Files/HomeSlider/2/Wallpaper.jpg")
-//                        .into(viewHolder.imageViewBackground);
-//                break;
-//            case 1:
-//                Glide.with(viewHolder.itemView)
-//                        .load("https://www.pehand.com/Files/HomeSlider/1/22.jpg")
-//                        .into(viewHolder.imageViewBackground);
-//                break;
-//
-//        }
+      final SliderImage currentImage = sliderImages.get(position);
         Glide.with(viewHolder.itemView)
-                .load(sliderImages.get(position).getPhotoName())
+                .load(currentImage.getPhotoName())
                 .placeholder(R.drawable.wallpaper)
                 .into(viewHolder.imageViewBackground);
-
+        viewHolder.imageViewBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sliderCallback.onClick(currentImage);
+            }
+        });
     }
 
     @Override

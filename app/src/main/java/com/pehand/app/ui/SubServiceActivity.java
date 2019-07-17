@@ -15,11 +15,8 @@ import com.pehand.app.R;
 import com.pehand.app.adapters.SubServicesAdapter;
 import com.pehand.app.backend.services.ServiceRepositoryImpl;
 import com.pehand.app.backend.services.ServicesRepository;
-import com.pehand.app.backend.subservies.SubServiceRepository;
-import com.pehand.app.backend.subservies.SubServicesRepositoryImpTemp;
 import com.pehand.app.common.Constants;
 import com.pehand.app.pojos.SubService;
-import com.pehand.app.pojos.SubServiceDetails;
 
 import java.util.ArrayList;
 
@@ -41,7 +38,7 @@ public class SubServiceActivity extends AppCompatActivity implements ServicesRep
 
         serviceId = getIntent().getExtras().getInt(SERVICE_ID);
         serviceName = getIntent().getExtras().getString(SERVICE_NAME);
-        actionBar.setTitle(serviceName);
+        if (serviceName != null) actionBar.setTitle(serviceName);
 
         ServicesRepository subServiceRepository = new ServiceRepositoryImpl();
         subServiceRepository.getAllSubServicesById(serviceId, this);

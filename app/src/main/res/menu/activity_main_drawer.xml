@@ -30,7 +30,7 @@
                 android:title="@string/facebook" />
             <item
                 android:id="@+id/nav_youtube"
-                android:icon="@drawable/ic_youtube"
+                android:icon="@drawable/ic_youtube_2"
                 android:title="@string/youtube" />
         </menu>
     </item>

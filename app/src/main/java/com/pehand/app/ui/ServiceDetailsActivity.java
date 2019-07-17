@@ -4,7 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -59,7 +61,8 @@ public class ServiceDetailsActivity extends AppCompatActivity implements Service
         Glide.with(this)
                 .load(subServiceDetails.getPhotoName())
                 .into(photoImageView);
-        descTextView.setText(subServiceDetails.getDescription());
+        String descText = subServiceDetails.getDescription().replace("</br>", "\n");
+        descTextView.setText(descText);
 
         continueButton.setEnabled(true);
         continueButton.setOnClickListener(new View.OnClickListener() {

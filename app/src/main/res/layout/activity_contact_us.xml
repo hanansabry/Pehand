@@ -101,6 +101,7 @@
 
 
     <Button
+        android:id="@+id/send"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_corner_button"

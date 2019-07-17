@@ -13,6 +13,8 @@ public class Service {
     private String serviceName;
     @SerializedName("PhotoName")
     private String photoName;
+    @SerializedName("SubCount")
+    private int subCount;
 
     public Service() {
     }
@@ -46,5 +48,13 @@ public class Service {
 
     public void setPhotoName(String photoName) {
         this.photoName = photoName;
+    }
+
+    public int getSubCount() {
+        return subCount;
+    }
+
+    public void setSubCount(int subCount) {
+        this.subCount = subCount;
     }
 }

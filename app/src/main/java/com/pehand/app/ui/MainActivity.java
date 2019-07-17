@@ -5,15 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.pehand.app.R;
 import com.pehand.app.adapters.ServicesAdapter;
 import com.pehand.app.adapters.SliderAdapter;
 import com.pehand.app.backend.services.ServiceRepositoryImpl;
 import com.pehand.app.backend.services.ServicesRepository;
 import com.pehand.app.common.BaseActivity;
+import com.pehand.app.common.Constants;
 import com.pehand.app.common.EmptyRecyclerView;
 import com.pehand.app.pojos.Service;
 import com.pehand.app.pojos.SliderImage;
+import com.pehand.app.pojos.SubServiceDetails;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -35,7 +38,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ServicesRepository.ServiceCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, ServicesRepository.ServiceCallback, SliderAdapter.SliderCallback {
 
     private Toolbar toolbar;
     private ServicesRepository servicesRepository;
@@ -44,6 +47,7 @@ public class MainActivity extends BaseActivity
     private View rootView;
     private LinearLayout emptyView;
     private View sliderViewContainer;
+    private ArrayList<Service> allServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +60,14 @@ public class MainActivity extends BaseActivity
         emptyView = findViewById(R.id.empty_view);
         sliderViewContainer = findViewById(R.id.slider_view_container);
 
-
         servicesRepository = new ServiceRepositoryImpl();
-        loadData(true);
+        if (getIntent().getExtras() != null) {
+            boolean showSlider = getIntent().getExtras().getBoolean(Constants.SHOW_SLIDER_KEY);
+            loadData(showSlider);
+        } else {
+            loadData(true);
+        }
+
         setupServicesRecyclerView();
     }
 
@@ -91,20 +100,20 @@ public class MainActivity extends BaseActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
     }
 
     private void setupServicesRecyclerView() {
         servicesRecyclerView = findViewById(R.id.services_recyclerView);
         servicesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        //servicesRecyclerView.setEmptyView(emptyView);
     }
 
     private void setupSliderView(ArrayList<SliderImage> sliderImages) {
         sliderViewContainer.setVisibility(View.VISIBLE);
         SliderView sliderView = findViewById(R.id.imageSlider);
-        sliderView.setSliderAdapter(new SliderAdapter(this, sliderImages));
+        sliderView.setSliderAdapter(new SliderAdapter(sliderImages, this));
         sliderView.startAutoCycle();
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -151,6 +160,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onSuccess(ArrayList<Service> allServices) {
+        this.allServices = allServices;
         progressBar.setVisibility(View.INVISIBLE);
         ServicesAdapter servicesAdapter = new ServicesAdapter(this, allServices, servicesRepository);
         servicesRecyclerView.setAdapter(servicesAdapter);
@@ -159,8 +169,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void onFailure(String msg) {
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-        //Snackbar.make(rootView, msg, Snackbar.LENGTH_INDEFINITE).show();
+        //Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Snackbar.make(rootView, getString(R.string.error_msg), Snackbar.LENGTH_LONG).show();
         emptyView.setVisibility(View.VISIBLE);
         sliderViewContainer.setVisibility(View.INVISIBLE);
         servicesRecyclerView.setVisibility(View.INVISIBLE);
@@ -176,5 +186,56 @@ public class MainActivity extends BaseActivity
                 loadData(true);
             }
         });
+    }
+
+    @Override
+    public void onClick(SliderImage currentImage) {
+        if (allServices != null) {
+            String linkUrl = currentImage.getLinkUrl();
+            if (linkUrl.contains(Constants.SERVICE_URL)) {
+                showHomeScreen(false);
+            } else if (linkUrl.contains(Constants.SUB_SERVICE_URL)) {
+                try {
+                    int subServiceId = Character.getNumericValue(linkUrl.charAt(linkUrl.length()-1));//to get last character of the link
+                    Service imageService = getServiceById(subServiceId);
+                    if (imageService != null) {
+                        Intent subServiceIntent;
+                        if (imageService.getSubCount() == 1) {
+                            subServiceIntent = new Intent(this, SubServiceDetails.class);
+                        } else {
+                            subServiceIntent = new Intent(this, SubServiceActivity.class);
+                        }
+                        subServiceIntent.putExtra(Constants.SERVICE_ID, imageService.getId());
+                        subServiceIntent.putExtra(Constants.SERVICE_NAME, imageService.getServiceName());
+                        startActivity(subServiceIntent);
+                    } else {
+                        showHomeScreen(true);
+                    }
+                } catch (NumberFormatException ex) {
+                    showHomeScreen(true);
+                }
+            } else {
+                showHomeScreen(true);
+            }
+        }
+    }
+
+    private void showHomeScreen(boolean showSlider) {
+        if (showSlider) {
+            sliderViewContainer.setVisibility(View.VISIBLE);
+        } else {
+            sliderViewContainer.setVisibility(View.GONE);
+        }
+//        Intent servicesIntent = new Intent(this, MainActivity.class);
+//        servicesIntent.putExtra(Constants.SHOW_SLIDER_KEY, showSlider);
+    }
+
+    private Service getServiceById(int id) {
+        for (Service service : allServices) {
+            if (service.getId() == id) {
+                return service;
+            }
+        }
+        return null;
     }
 }

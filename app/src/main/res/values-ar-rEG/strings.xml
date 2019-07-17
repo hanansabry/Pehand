@@ -33,4 +33,12 @@
     <string name="home">الرئيسية</string>
     <string name="more">للمزيد</string>
     <string name="for_continue">للمتابعة</string>
+    <string name="error_msg">حدث خطأ أثناء تحميل البيانات\n من فضلك تأكد من اتصالك بالانترنت وحاول مرة أخرى</string>
+    <string name="not_available">لا تتوفر هذه الخدمة حاليا</string>
+    <string name="required_field">هذه الخانة مطلوبة</string>
+    <string name="send_error">حدث خطأأثناء الارسال .. من فضلك حاول مرة أخرى</string>
+    <string name="msg_sent_successfully">تم ارسال رسالتك بنجاح، سوف يتم الرد عليك في أقرب وقت</string>
+    <string name="city_village_required">يجب ان تختار المدينة والقرية التابع لها</string>
+    <string name="conditions_terms_check">يجب ان توافق على الشروط والأحكام</string>
+    <string name="order_sent_successfully">تم ارسال طلبك بنجاح</string>
 </resources>
