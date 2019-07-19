@@ -1,6 +1,9 @@
 package com.pehand.app.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -137,17 +140,27 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_home) {
             sliderViewContainer.setVisibility(View.VISIBLE);
+            setTitle(getString(R.string.app_name));
             loadData(true);
         } else if (id == R.id.nav_services) {
             sliderViewContainer.setVisibility(View.GONE);
+            setTitle(getString(R.string.services));
             loadData(false);
         } else if (id == R.id.nav_offers) {
             startActivity(new Intent(this, OffersActivity.class));
+        } else if (id == R.id.nav_join_as_technical) {
+            startActivity(new Intent(this, ContactUsActivity.class));
         } else if (id == R.id.nav_contact_us) {
             startActivity(new Intent(this, ContactUsActivity.class));
+        } else if (id == R.id.nav_conditions_terms) {
+            startActivity(new Intent(this, ConditionTermsActivity.class));
         } else if (id == R.id.nav_facebook) {
-            Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/pehand"));
-            startActivity(facebookIntent);
+//            String facebookUri = getFacebookPageURL(this);
+            String facebookUri = "https://www.facebook.com/n/?pehand";
+            Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUri));
+            if(facebookIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(facebookIntent);
+            }
         } else if (id == R.id.nav_youtube) {
             Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCEtDcoitkZhtBclYoiEvNEQ"));
             startActivity(youtubeIntent);
@@ -226,8 +239,6 @@ public class MainActivity extends BaseActivity
         } else {
             sliderViewContainer.setVisibility(View.GONE);
         }
-//        Intent servicesIntent = new Intent(this, MainActivity.class);
-//        servicesIntent.putExtra(Constants.SHOW_SLIDER_KEY, showSlider);
     }
 
     private Service getServiceById(int id) {
@@ -237,5 +248,21 @@ public class MainActivity extends BaseActivity
             }
         }
         return null;
+    }
+
+    public String getFacebookPageURL(Context context) {
+        String FACEBOOK_URL = "https://www.facebook.com/pehand";
+        String FACEBOOK_PAGE_ID = "pehand";
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
     }
 }

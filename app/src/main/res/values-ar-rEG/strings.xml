@@ -29,7 +29,7 @@
     <string name="enter_contact_details">ادخل بيانات الاتصال</string>
     <string name="city_prompt">المدينة: *</string>
     <string name="village_prompt">المنطقة: *</string>
-    <string name="agree_for_terms_checkbox">أوافق على الشروط والأحكام</string>
+    <string name="agree_for_terms_checkbox">أوافق على</string>
     <string name="home">الرئيسية</string>
     <string name="more">للمزيد</string>
     <string name="for_continue">للمتابعة</string>
@@ -40,5 +40,10 @@
     <string name="msg_sent_successfully">تم ارسال رسالتك بنجاح، سوف يتم الرد عليك في أقرب وقت</string>
     <string name="city_village_required">يجب ان تختار المدينة والقرية التابع لها</string>
     <string name="conditions_terms_check">يجب ان توافق على الشروط والأحكام</string>
-    <string name="order_sent_successfully">تم ارسال طلبك بنجاح</string>
+    <string name="order_sent_successfully"> تم إرسال طلبكم بنجاح ، سنتواصل معكم فى أقرب وقت لتأكيد الطلب وتأكيد الميعاد</string>
+    <string name="join_as_technical">الانضمام كفني</string>
+    <string name="granted_title">كيف أضمن الفنيين والأمانة؟</string>
+    <string name="granted_content">جميع الفنيين و الشركات المتعاقدين مع بى هاند بياناتهم مسجلة بالكامل و موقع معهم عقود تضمن حقوق العملاء. ولكن يرجي العلم أنه في حالة التعامل مباشرة مع الفني بدون علم الشركة فأن الشركة تصبح غير مسؤله عن أي مشكلة تحدث وغير ملزمة بالتدخل او تقديم اي بيانات عن الفني في هذه الحالة</string>
+    <string name="conditions_and_terms">الشروط والأحكام</string>
+    <string name="conditions_terms_content"><![CDATA[<body dir=\"rtl\"><ul><font color=\"#808080\">  <li><h4>يقوم فريق العمل في بى هاند بإختيار افضل الفنيين و الشركات . </h4></li>  <li><h4>جميع الفنيين و الشركات المتعاقدين مع بى هاند بياناتهم معروفه بالكامل و موقع معهم عقود تضمن حقوق العملاء.</h4></li>  <li><h4>يلتزم مقدم الخدمه وحده بأي أضرار تحدث في مكان التنفيذ كما يلتزم بإعادة الخدمه في حالة عدم تأديتها بصوره جيده و مقبوله طبقا للمعايير الفنيه.  </h4></li>  <li><h4>ولكن يرجي العلم أنه في حاله التعامل مباشرة مع الفني بدون علم الشركه أو حدوث اي تغييرات جذريه في الطلب بدون علم الشركه فأن الشركه تصبح غير مسؤله عن أي مشكله تحدث وغير ملزمه بتقديم اي بيانات عن الفني في هذه الحاله .</h4></li>   <li><h4>الحفاظ علي المتعلقات الشخصيه مسؤولية العميل. </h4></li>  <li><h4>يتم اصلاح ونظافة اي اغراض في مكان العميل والشركه غير مسؤوله عن اي اغراض تنقل من منزل العميل دون علم الشركه .</h4></li>  <li><h4>يلتزم العميل بإبلاغ الشركه قبل دفع اي مبلغ يتعدي 1000 جنيه لمقدم الخدمه.</h4></li></ul></font></body>]]></string>
 </resources>

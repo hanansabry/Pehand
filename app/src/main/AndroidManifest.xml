@@ -7,20 +7,26 @@
     <application
         android:name=".common.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.OrderDoneActivity"></activity>
+        <activity
+            android:name=".ui.ConditionTermsActivity"
+            android:label="@string/conditions_and_terms" />
         <activity
             android:name=".ui.ServiceOrderActivity"
-            android:label="@string/order_now"></activity>
+            android:label="@string/order_now" />
         <activity android:name=".ui.SubServiceActivity" />
         <activity android:name=".ui.ServiceDetailsActivity" />
         <activity
             android:name=".ui.ContactUsActivity"
             android:label="@string/contact_us" />
-        <activity android:name=".ui.OffersActivity" android:label="@string/offers" />
+        <activity
+            android:name=".ui.OffersActivity"
+            android:label="@string/offers" />
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"

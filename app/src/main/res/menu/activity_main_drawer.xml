@@ -16,10 +16,20 @@
             android:id="@+id/nav_offers"
             android:icon="@drawable/ic_offers"
             android:title="@string/offers" />
+
+        <item
+            android:id="@+id/nav_join_as_technical"
+            android:icon="@drawable/ic_technical"
+            android:title="@string/join_as_technical" />
+
         <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_contact_us"
             android:title="@string/contact_us" />
+        <item
+            android:id="@+id/nav_conditions_terms"
+            android:icon="@drawable/ic_terms_conditions"
+            android:title="@string/conditions_and_terms" />
     </group>
 
     <item android:title="@string/social_media">
